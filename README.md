@@ -22,3 +22,8 @@
 
 对比论文里的一些参数设定，结合F1 score，当前learning_rate=1e-4偏低，decay=0.005偏大，训练应该是欠拟合，还有提升空间
 
+
+可以看`./results`路径
+ - large_model是200epoch的训练结果
+ - large_model3是接上一轮后continue learning 100epoch的结果
+
