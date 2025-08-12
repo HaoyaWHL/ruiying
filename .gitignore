@@ -4,3 +4,6 @@
 /ref
 
 /workflow/runs
+
+/main/*.pth
+/main/*.pt

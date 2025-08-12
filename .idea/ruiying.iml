@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ref/RT-ODLab-main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/workflow" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="ruiying" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="py311_llamafy (3)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

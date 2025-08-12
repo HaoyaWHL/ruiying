@@ -1,0 +1,17 @@
+# 数据集路径
+path: E:\pycharm\github_reps\online_git\ruiying\data\woodsurface  # 数据集根目录
+
+# 训练和验证数据集的相对路径
+train: images/train  # 训练图像文件夹路径
+val: images/val  # 验证图像文件夹路径
+
+# 类别信息
+names:
+  0: Quartzity
+  1: Live_Knot
+  2: Marrow
+  3: resin
+  4: Dead_Knot
+  5: knot_with_crack
+  6: Knot_missing
+  7: Crack
