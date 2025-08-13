@@ -37,7 +37,7 @@ def demo_train():
         name='exp',
     )
 
-#demo_train()
+# demo_train()
 
 
 # 主要是想知道怎么处理数据的，然后处理数据这块代码能否复用
@@ -52,6 +52,8 @@ def base():
     # for idx,data in enumerate(dataloader):
     #     print(data)
     #     break
+
+base()
 
 
 def modify_backobone_from_deepseek_win():
@@ -205,7 +207,7 @@ def modify_backobone_from_deepseek_linux():
             batch=1  # 批处理大小
         )
 
-modify_backobone_from_deepseek_linux()
+# modify_backobone_from_deepseek_linux()
 
 def check_timm_models():
     import timm
