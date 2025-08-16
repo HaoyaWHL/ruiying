@@ -18,6 +18,7 @@ Examples:
 """
 
 from .dysample import (DySample)
+from .Biformer import (BiLevelRoutingAttention)
 from .block import (
     C1,
     C2,

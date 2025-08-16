@@ -7,3 +7,5 @@
 
 /main/*.pth
 /main/*.pt
+/main/pretrain_models/*.pt
+/main/pretrain_models/*.pth

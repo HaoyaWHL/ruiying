@@ -10,7 +10,9 @@ import torch
 import os
 
 gpu_index = '3'
-os.environ['CUDA_VISIBLE_DEVICES'] = gpu_index
+if gpu_index != 'cpu':
+    os.environ['CUDA_VISIBLE_DEVICES'] = gpu_index
+
 
 def demo_train():
     from ultralytics import YOLO
@@ -53,7 +55,7 @@ def base():
     #     print(data)
     #     break
 
-base()
+# base()
 
 
 def modify_backobone_from_deepseek_win():
@@ -138,10 +140,8 @@ def modify_backobone_from_deepseek_linux():
         #state_dict = torch.load('./mobilenetv4_conv_small.pth')
         # filtered_state_dict = {k: v for k, v in state_dict.items() if not k.startswith('fc.')}
 
-
         backbone = timm.create_model(name, features_only=True, pretrained=False)
         state_dict = torch.load("./" + name + ".pth")
-
 
         backbone.load_state_dict(state_dict, strict=False)
         return backbone
@@ -161,7 +161,7 @@ def modify_backobone_from_deepseek_linux():
         data='./linux_woodsurface.yaml',
         cache=True,  # 改为True可以加速数据加载(确保有足够RAM)
         imgsz=640,
-        epochs=3,  # 木材缺陷可能需要更多epochs
+        epochs=70,  # 木材缺陷可能需要更多epochs
         batch=64,  # 512对于大多数显卡过大，建议从32开始逐步增加
         close_mosaic=10,  # 提前关闭mosaic增强
         device=gpu_index,  # 考虑使用多GPU如'0,1,2,3'
@@ -218,6 +218,18 @@ def check_timm_models():
     for i in all_models:
         if "mobilenetv4" in i:
             print(i)
+    # mobilenetv4_conv_aa_large
+    # mobilenetv4_conv_aa_medium
+    # mobilenetv4_conv_blur_medium
+    # mobilenetv4_conv_large
+    # mobilenetv4_conv_medium
+    # mobilenetv4_conv_small
+    # mobilenetv4_conv_small_035
+    # mobilenetv4_conv_small_050
+    # mobilenetv4_hybrid_large
+    # mobilenetv4_hybrid_large_075
+    # mobilenetv4_hybrid_medium
+    # mobilenetv4_hybrid_medium_075
 # check_timm_models()
 
 
@@ -225,14 +237,38 @@ def download_resnet50_locally():
     import timm
     import torch
 
-    # 创建ResNet50模型并下载预训练权重
-    # model = timm.create_model('mobilenetv4_conv_small', pretrained=True)
-    model = timm.create_model('mobilenetv4_conv_large', pretrained=True)
+    # # 创建ResNet50模型并下载预训练权重
+    # # model = timm.create_model('mobilenetv4_conv_small', pretrained=True)
+    # model = timm.create_model('mobilenetv4_conv_large', pretrained=True)
+    #
+    # # 保存模型权重到本地
+    # torch.save(model.state_dict(), './mobilenetv4_conv_large.pth')
+    # # torch.save(model.state_dict(), './mobilenetv4_conv_small.pth')
+    # # print("ResNet50模型权重已保存到本地: ./mobilenetv4_conv_small.pth")
+    # print("模型权重已保存到本地")
 
-    # 保存模型权重到本地
-    torch.save(model.state_dict(), './mobilenetv4_conv_large.pth')
-    # torch.save(model.state_dict(), './mobilenetv4_conv_small.pth')
-    # print("ResNet50模型权重已保存到本地: ./mobilenetv4_conv_small.pth")
-    print("模型权重已保存到本地")
+    # modelist = ["mobilenetv4_conv_aa_large", "mobilenetv4_conv_aa_medium", "mobilenetv4_conv_blur_medium",
+    #             "mobilenetv4_conv_large", "mobilenetv4_conv_medium", "mobilenetv4_conv_small",
+    #             "mobilenetv4_conv_small_035", "mobilenetv4_conv_small_050", "mobilenetv4_hybrid_large",
+    #             "mobilenetv4_hybrid_large_075", "mobilenetv4_hybrid_medium", "mobilenetv4_hybrid_medium_075"]
+    modelist = ["mobilenetv4_conv_aa_large", "mobilenetv4_conv_aa_medium", "mobilenetv4_conv_blur_medium",
+                "mobilenetv4_conv_medium",
+                "mobilenetv4_conv_small_035", "mobilenetv4_conv_small_050", "mobilenetv4_hybrid_large",
+                "mobilenetv4_hybrid_large_075", "mobilenetv4_hybrid_medium", "mobilenetv4_hybrid_medium_075"]
+    for name in modelist:
+        try:
+            # 创建ResNet50模型并下载预训练权重
+            model = timm.create_model(name, pretrained=True)
+
+            # 保存模型权重到本地
+            torch.save(model.state_dict(), './pretrain_models/{}.pth'.format(name))
+            print("{}模型权重已保存到本地".format(name))
+        except:
+            print(name)
+            continue
+
 # download_resnet50_locally()
+
+
+
 

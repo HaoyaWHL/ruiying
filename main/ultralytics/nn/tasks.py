@@ -12,6 +12,7 @@ import torch.nn as nn
 
 from ultralytics.nn.autobackend import check_class_names
 from ultralytics.nn.modules import (
+    BiLevelRoutingAttention,
     DySample,
     AIFI,
     C1,
@@ -1738,6 +1739,9 @@ def parse_model(d, ch, verbose=True):
             args = [*args[1:]]
         # elif m is DySample:
         #     args = [ch[f]]
+        elif m is BiLevelRoutingAttention:
+            c2 = ch[f]
+            args = [c2, *args]
         else:
             c2 = ch[f]
 
