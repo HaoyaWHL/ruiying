@@ -141,12 +141,14 @@ def modify_backobone_from_deepseek_linux():
         # filtered_state_dict = {k: v for k, v in state_dict.items() if not k.startswith('fc.')}
 
         backbone = timm.create_model(name, features_only=True, pretrained=False)
-        state_dict = torch.load("./" + name + ".pth")
+        state_dict = torch.load(name + ".pth")
 
         backbone.load_state_dict(state_dict, strict=False)
         return backbone
 
-    backbone_name = "mobilenetv4_conv_large"
+    pre_name = "./pretrain_models/"
+    # backbone_name = "mobilenetv4_conv_large"
+    backbone_name = pre_name + "mobilenetv4_conv_small"
     backbone = get_backbone_mobilenetv4(backbone_name)
 
     # 修改 YOLO 的 backbone
@@ -158,10 +160,11 @@ def modify_backobone_from_deepseek_linux():
     print(model)
 
     model.train(
-        data='./linux_woodsurface.yaml',
+        # data='./linux_woodsurface.yaml',
+        data='./linux_woodsurface_exclude_0.yaml',
         cache=True,  # 改为True可以加速数据加载(确保有足够RAM)
         imgsz=640,
-        epochs=70,  # 木材缺陷可能需要更多epochs
+        epochs=20,  # 木材缺陷可能需要更多epochs
         batch=64,  # 512对于大多数显卡过大，建议从32开始逐步增加
         close_mosaic=10,  # 提前关闭mosaic增强
         device=gpu_index,  # 考虑使用多GPU如'0,1,2,3'
@@ -207,7 +210,7 @@ def modify_backobone_from_deepseek_linux():
             batch=1  # 批处理大小
         )
 
-# modify_backobone_from_deepseek_linux()
+modify_backobone_from_deepseek_linux()
 
 def check_timm_models():
     import timm
@@ -268,6 +271,7 @@ def download_resnet50_locally():
             continue
 
 # download_resnet50_locally()
+
 
 
 
