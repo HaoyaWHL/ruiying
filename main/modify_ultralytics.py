@@ -148,13 +148,14 @@ def modify_backobone_from_deepseek_linux():
 
     pre_name = "./pretrain_models/"
     # backbone_name = "mobilenetv4_conv_large"
-    backbone_name = pre_name + "mobilenetv4_conv_small"
+    backbone_name = pre_name + "mobilenetv4_conv_large"
     backbone = get_backbone_mobilenetv4(backbone_name)
 
     # 修改 YOLO 的 backbone
     #model = YOLO('yolov8n.yaml')  # 加载默认配置
     #model = YOLO('ultralytics/cfg/models/11/yolo11l.yaml') # 在workflow下加载模型的方式
     model = YOLO("./tmp/yolo11.yaml")
+    #model = YOLO('yolov11l.yaml')  # 加载默认配置
     model.model.backbone = backbone  # 替换 backbone
 
     print(model)
@@ -164,29 +165,29 @@ def modify_backobone_from_deepseek_linux():
         data='./linux_woodsurface_exclude_0.yaml',
         cache=True,  # 改为True可以加速数据加载(确保有足够RAM)
         imgsz=640,
-        epochs=20,  # 木材缺陷可能需要更多epochs
-        batch=64,  # 512对于大多数显卡过大，建议从32开始逐步增加
+        epochs=200,  # 木材缺陷可能需要更多epochs
+        batch=128,  # 512对于大多数显卡过大，建议从32开始逐步增加
         close_mosaic=10,  # 提前关闭mosaic增强
         device=gpu_index,  # 考虑使用多GPU如'0,1,2,3'
-        optimizer='AdamW',  # 对于小数据集AdamW可能更好
-        lr0=1e-4,  # 明确设置学习率
-        weight_decay=0.02,  # 添加权重衰减
+        optimizer='SGD',  # 对于小数据集AdamW可能更好
+        lr0=1e-3,  # 明确设置学习率
+        weight_decay=1e-4,  # 添加权重衰减
         project='runs/train',
         name='large_model',  # 使用更有意义的名称
         #patience=20,  # 早停机制
         mixup=0.2,  # 数据增强
         hsv_h=0.015,  # 色相增强
-        hsv_s=0.7,  # 饱和度增强
-        hsv_v=0.4,  # 明度增强
-        flipud=0.5,  # 上下翻转增强
-        fliplr=0.5,  # 左右翻转增强
-        degrees=10.0,  # 旋转增强
+        hsv_s=0.5,  # 饱和度增强
+        hsv_v=0.3,  # 明度增强
+        flipud=0.3,  # 上下翻转增强
+        fliplr=0.4,  # 左右翻转增强
+        degrees=20.0,  # 旋转增强
         translate=0.1,  # 平移增强
         scale=0.5,  # 缩放增强
         shear=2.0,  # 剪切增强
-        perspective=0.0005,  # 透视变换
+        perspective=0.00105,  # 透视变换
         save=True,  # 保存训练结果
-        save_period=5,  # 每5个epoch保存一次
+        save_period=10,  # 每5个epoch保存一次
         single_cls=False,  # 如果是多类别检测
         # pretrained=True  # 使用预训练权重
     )
